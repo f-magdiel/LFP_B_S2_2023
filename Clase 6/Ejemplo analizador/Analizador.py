@@ -1,11 +1,18 @@
 from Instrucciones.Aritmetica import *
+from Instrucciones.Texto import *
 from Error.Errores import *
 from Abstract.Lexema import *
 from Abstract.Numero import *
 
+
 reserved = {
     'ROPERACIONES'      : 'Operaciones',
     'ROPERACION'        : 'Operacion',
+    'RCONFIGURACION'    : 'Configuraciones',
+    'RTEXTO'            : 'texto',
+    'RCOLORFONDONODO'   : 'color-fondo-nodo',
+    'RCOLORFUENTENODO'  : 'color-fuente-nodo',
+    'RFORMANODO'        : 'forma-nodo',
     'RVALOR1'           : 'Valor1',
     'RVALOR2'           : 'Valor2',
     'RSUMA'             : 'Suma',
@@ -43,13 +50,12 @@ def intruccion(cadena):
         char = cadena[puntero]
         puntero += 1
 
-        if char == "\"":       #! leemos nuestra cadena y al encontrar " que habre empieza a crear el token
+        if char == '"':       #! leemos nuestra cadena y al encontrar " que habre empieza a crear el token
             lexema, cadena = armar_lexema(cadena[puntero:])
             if lexema and cadena:
                 n_columna += 1
                 #Armar lexema como clase
                 l = Lexema(lexema, n_linea, n_columna)
-
                 lista_lexemas.append(l)  #! Agregamos los lexemas a la lista_lexema
                 n_columna += len(lexema) + 1
                 puntero = 0
@@ -137,10 +143,10 @@ def operar():
     operacion = ''
     n1 = ''
     n2 = ''
-
     text = ''
 
     while lista_lexemas:
+
         lexema = lista_lexemas.pop(0)
         if lexema.operar(None) == 'Operacion':
             operacion = lista_lexemas.pop(0)
@@ -153,6 +159,29 @@ def operar():
             if n2.operar(None) == '[':
                 n2 = operar()
 
+        if lexema.operar(None)== 'texto':
+
+            tipo = 'texto'
+            text = lista_lexemas.pop(0)
+            return Texto(text, tipo ,  f'Inicio: {text.getFila()}', f'Fin: {text.getColumna()}')
+
+        if lexema.operar(None) == 'color-fondo-nodo':
+
+            tipo = 'color-fondo-nodo'
+            text = lista_lexemas.pop(0)
+            return Texto(text, tipo ,  f'Inicio: {text.getFila()}', f'Fin: {text.getColumna()}')
+
+        if lexema.operar(None) == 'color-fuente-nodo':
+
+            tipo = 'color-fuente-nodo'
+            text = lista_lexemas.pop(0)
+            return Texto(text, tipo ,  f'Inicio: {text.getFila()}', f'Fin: {text.getColumna()}')
+
+        if lexema.operar(None) == 'forma-nodo':
+
+            tipo = 'forma-nodo'
+            text = lista_lexemas.pop(0)
+            return Texto(text, tipo ,  f'Inicio: {text.getFila()}', f'Fin: {text.getColumna()}')
 
         if operacion and n1 and n2:
             return Aritmetica(n1, n2, operacion, f'Inicio: {operacion.getFila()}: {operacion.getColumna()}', f'Fin: {n2.getFila()}: {n2.getColumna()}')
