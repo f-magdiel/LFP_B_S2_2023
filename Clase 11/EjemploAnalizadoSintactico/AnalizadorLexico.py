@@ -136,7 +136,7 @@ def instruccion(cadena):
             puntero = 0
             n_linea += 1
             n_columna = 1
-        elif char == ' ' or char == '\r' or char == '.' or char == ':':
+        elif char == ' ' or char == '\r' or char == '.' or char == ':': #! Y Desde aquí se omiten los espacios
             n_columna += 1
             cadena = cadena[1:]
             puntero = 0
@@ -158,8 +158,8 @@ def armar_lexema(cadena):
 
     for char in cadena:
         puntero += char
-        if char == '"' or char == '\n' or char == '\t' or char == '(' or char == ')' or char == ' ':
-            return lexema, cadena[len(puntero):]    #! si encuentra una  " termino de leer el token
+        if char == '"' or char == '\n' or char == '\t' or char == '(' or char == ')':
+            return lexema, cadena[len(puntero):]   # Se toman en cuenta los espacios
         else:
             lexema += char   #! creamos nuestros Token
     return None, None
